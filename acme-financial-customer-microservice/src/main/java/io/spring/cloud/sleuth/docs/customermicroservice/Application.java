@@ -18,6 +18,7 @@ public class Application {
 
 	@RequestMapping("/startOfCustomer-Microservice")
 	public String customerMicroServiceController() throws InterruptedException {
+		Thread.sleep(2000);
 		log.info("Hello from Acme's Customer Microservice");
 		return "Hello from Acme's Customer Microservice";
 	}

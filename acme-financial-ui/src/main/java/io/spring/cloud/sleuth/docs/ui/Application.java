@@ -33,6 +33,23 @@ public class Application {
 		log.info("Front Page");
 		return "Front Page";
 	}
+	
+	@RequestMapping("/demostart")
+	public String demostart() throws InterruptedException {
+		Span span = null;
+		try {
+			log.info("Welcome To Acme Financial. Calling Acme Financial's Back Office Microservice");
+			span = tracer.createSpan("callingBackOfficeMicroService_span");
+			span.logEvent("call_backOfficeMicroService");
+			String response = restTemplate.getForObject("http://" + backOfficeMicroServiceAddress + "/startOfBackOffice-Service", String.class);
+			span.logEvent("response_received_backOfficeMicroService");
+			tracer.addTag("ui","success");
+			log.info("Got response from Acme Financial's Back Office Microservice [{}]", response);
+			return response;
+		}finally {
+			tracer.close(span);
+		}
+	}
 
 	@RequestMapping("/velocitystart")
 	public String velocitystart() throws InterruptedException {
